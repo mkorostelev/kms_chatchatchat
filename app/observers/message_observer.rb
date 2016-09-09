@@ -1,10 +1,8 @@
 class MessageObserver < ActiveRecord::Observer
-  # def after_save(message)
-  #   message.users_messages.clear
-  #   a = []
-  #   message.chat.users.each do |user|
-  #     a << { user: user }
-  #   end
-  #   message.users_messages.create!(a)
-  # end
+  def before_save(message)
+    message.chat.users.each do |user|
+      users_message = message.users_messages.build(user: user)
+      users_message.status = :readed if user == message.author
+    end
+  end
 end

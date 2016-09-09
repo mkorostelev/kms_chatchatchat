@@ -1,8 +1,6 @@
 class Api::UsersController < ApplicationController
   skip_before_action :authenticate, only: [:create]
 
-  include ActiveModel::Validations
-
   def create
     super
 
@@ -16,8 +14,7 @@ class Api::UsersController < ApplicationController
   end
 
   def resource
-    @user ||= params[:id] && params[:action] != 'update' ?
-                            User.find(params[:id]) : current_user
+    @user ||= User.find(params[:id])
   end
 
   def resource_params

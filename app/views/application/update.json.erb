@@ -1,1 +1,1 @@
-<%= sanitize resource(context: {user: @current_user}).decorate.to_json %>
+<%= sanitize resource.decorate(context: {user: @current_user}).to_json %>

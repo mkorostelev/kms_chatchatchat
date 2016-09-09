@@ -1,6 +1,4 @@
 class Api::MessagesController < ApplicationController
-  include ActiveModel::Validations
-
   private
 
   def parent
@@ -17,9 +15,5 @@ class Api::MessagesController < ApplicationController
 
   def resource_params
     params.require(:message).permit(:text).merge(author: current_user)
-  end
-
-  def collection
-    @collection ||= Message.page(params[:page]).per(5)
   end
 end

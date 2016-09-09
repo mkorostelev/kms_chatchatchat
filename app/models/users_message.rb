@@ -5,5 +5,7 @@ class UsersMessage < ApplicationRecord
 
   belongs_to :message, dependent: :destroy
 
+  has_many :chat, through: :message
+
   validates :user, :message, :status, presence: true
 end

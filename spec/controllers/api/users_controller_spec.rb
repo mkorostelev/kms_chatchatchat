@@ -5,8 +5,6 @@ RSpec.describe Api::UsersController, type: :controller do
 
   it { should route(:post, 'api/users').to(action: :create) }
 
-  it { should route(:get, 'api/profile').to(action: :show) }
-
   describe '#create.json' do
     # def create
     #   build_resource

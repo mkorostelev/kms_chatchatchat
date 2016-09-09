@@ -1,12 +1,4 @@
 class Api::ChatsController < ApplicationController
-  include ActiveModel::Validations
-
-  def mark_as_readed
-    Chat.find(params[:chat_id]).users_messages.where(user: current_user)
-                                              .update_all(status: 1)
-    head:ok
-  end
-
   private
 
   def build_resource

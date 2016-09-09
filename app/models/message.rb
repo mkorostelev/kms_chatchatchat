@@ -1,7 +1,7 @@
 class Message < ApplicationRecord
   belongs_to :chat
 
-  belongs_to :author, class_name: 'User'#, inverse_of: :my_messages
+  belongs_to :author, class_name: 'User'
 
   has_many :users_messages
 

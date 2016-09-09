@@ -5,7 +5,7 @@ class User < ApplicationRecord
 
   has_and_belongs_to_many :chats
 
-  #!!! has_many :messages, foreign_key: 'author_id'#, inverse_of: :author
+  has_many :my_messages, foreign_key: 'author_id', class_name: Message
 
   has_secure_password
 
