@@ -11,6 +11,8 @@ RSpec.describe Api::UsersController, type: :controller do
 
     #   resource.save!
 
+    #   UserMailer.welcome_email(resource).deliver_now
+
     #   head :created
     # end
 
@@ -38,6 +40,12 @@ RSpec.describe Api::UsersController, type: :controller do
                               first_name: 'Name', last_name: 'Surname')).and_return(object)}
 
     before { expect(object).to receive(:save!) }
+
+    before do
+      expect(UserMailer).to receive(:welcome_email).with(object) do
+        double.tap { |a| expect(a).to receive(:deliver_now)}
+      end
+    end
 
     before { post :create, params: params, format: :json }
 

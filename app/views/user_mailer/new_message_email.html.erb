@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h1>
+    <%= @user.full_name %>! You have new mesasge in, <%= @chat.name %>
+    <% unread_messages_count = @chat.unread_messages_count %>
+    <% if unread_messages_count > 1 %>
+     Also you have <%= unread_messages_count %> unreaded messages
+    <% end %>
+    </h1>
+  </body>
+</html>

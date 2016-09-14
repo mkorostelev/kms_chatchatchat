@@ -33,9 +33,11 @@ ActiveRecord::Schema.define(version: 20160902203157) do
   create_table "messages", force: :cascade do |t|
     t.text     "text"
     t.integer  "author_id"
+    t.integer  "chat_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["author_id"], name: "index_messages_on_author_id", using: :btree
+    t.index ["chat_id"], name: "index_messages_on_chat_id", using: :btree
   end
 
   create_table "users", force: :cascade do |t|
@@ -63,6 +65,7 @@ ActiveRecord::Schema.define(version: 20160902203157) do
 
   add_foreign_key "chats_users", "chats"
   add_foreign_key "chats_users", "users"
+  add_foreign_key "messages", "chats"
   add_foreign_key "users_messages", "chats"
   add_foreign_key "users_messages", "messages"
   add_foreign_key "users_messages", "users"

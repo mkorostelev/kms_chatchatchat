@@ -4,30 +4,16 @@ class ChatDecorator < Draper::Decorator
   decorates_association :messages
 
   def as_json *args
-    if context[:collection]
-      {
-        id: id,
-        name: name,
-        users: users,
-        unread_messages_count: unread_messages_count,
-        last_message: last_message
-      }
-    elsif context[:show]
-      {
-        id: id,
-        name: name,
-        users: users,
-        unread_messages_count: unread_messages_count,
-        messages: messages
-      }
-    else
-      {
-        id: id,
-        name: name,
-        users: users,
-        unread_messages_count: unread_messages_count
-      }
-    end
+    super only: [:id, :name],
+          methods: context_methods
+
+  end
+
+  def context_methods
+    @context_methods = [:users, :unread_messages_count]
+    return @context_methods << :last_message if context[:collection]
+    return @context_methods << :messages if context[:show]
+    @context_methods
   end
 
   def unread_messages_count

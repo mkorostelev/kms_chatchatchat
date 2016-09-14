@@ -37,6 +37,7 @@ group :test do
   gem 'rspec-activemodel-mocks'
   gem 'rspec-its'
   gem 'rails-controller-testing'
+  gem 'email_spec'
 end
 gem 'draper', '~> 3.0.0.pre1'
 
@@ -45,3 +46,5 @@ gem 'simplecov', :require => false, :group => :test
 
 gem 'rails-observers', github: 'rails/rails-observers'
 gem 'kaminari'
+
+gem 'letter_opener', :group => :development

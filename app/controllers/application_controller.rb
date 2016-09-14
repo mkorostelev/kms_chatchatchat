@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
-  helper_method :resource, :collection
+  helper_method :resource, :collection, :current_user
 
   skip_before_action :verify_authenticity_token, if: :json_request?
 

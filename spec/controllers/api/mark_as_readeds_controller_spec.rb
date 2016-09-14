@@ -19,8 +19,12 @@ RSpec.describe Api::MarkAsReadedsController, type: :controller do
         double.tap do |a|
           expect(a).to receive(:users_messages) do
             double.tap do |b|
-              expect(b).to receive(:where).with(user: user) do
-                double.tap { |c| expect(c).to receive(:update_all).with(status: 1) }
+              expect(b).to receive(:unreaded) do
+                double.tap do |c|
+                  expect(c).to receive(:where).with(user: user) do
+                    double.tap { |d| expect(d).to receive(:update_all).with(status: :readed) }
+                  end
+                end
               end
             end
           end
