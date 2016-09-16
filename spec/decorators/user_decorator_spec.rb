@@ -11,7 +11,21 @@ RSpec.describe UserDecorator do
     #                        { status: 0, user: context[:user] }).distinct.count
     # end
 
-    before { expect(subject).to receive(:unreaded_chats_count).and_return 1 }
+    before do
+      expect(Chat).to receive(:joins).with(:users_messages) do
+        double.tap do |a|
+          expect(a).to receive(:where).with(users_messages: { status: 0, user: user }) do
+            double.tap do |b|
+              expect(b).to receive(:distinct) do
+                double.tap do |c|
+                  expect(c).to receive(:count).and_return(1)
+                end
+              end
+            end
+          end
+        end
+      end
+    end
 
     its('as_json.symbolize_keys') do
       should eq \

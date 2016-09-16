@@ -7,15 +7,42 @@ RSpec.describe Api::SessionsController, type: :controller do
   it { should route(:delete, 'api/session').to(action: :destroy) }
 
   describe '#create.json' do
-    before { expect(subject).to receive(:build_resource) }
+    # build_resource
 
-    before do
-      expect(subject).to receive(:resource) do
-        double.tap { |a| expect(a).to receive(:save!) }
-      end
-    end
+    # resource.save!
 
-    before { post :create, session: { email: 'one@digits.com', password: '12345678' }, format: :json }
+    # def build_resource
+    #   @session = Session.new resource_params
+    # end
+
+    # def resource
+    #   @session ||= Session.new user: current_user
+    # end
+
+    # def resource_params
+    #   params.require(:session).permit(:email, :password)
+    # end
+
+    let(:params) { { email: 'one@digits.com', password: '12345678' } }
+
+    let(:resource) { double }
+
+    before { expect(Session).to receive(:new).with(permit!(params))
+                                              .and_return(resource) }
+
+    before { expect(resource).to receive(:save!) }
+
+    # before { expect(subject).to receive(:build_resource) }
+
+    # before do
+    #   expect(subject).to receive(:resource) do
+    #     double.tap { |a| expect(a).to receive(:save!) }
+    #   end
+    # end
+
+    # before { post :create, session: params, format: :json }
+
+    before { process :create, method: :post, params: { session: params }, format: :json }
 
     it { should render_template :create }
   end
@@ -36,25 +63,25 @@ RSpec.describe Api::SessionsController, type: :controller do
     it { expect(response.status).to eq(200) }
   end
 
-  describe '#build_resource' do
-    # @session = Session.new resource_params
-    let(:params) { { foo: :bar } }
+  # describe '#build_resource' do
+  #   # @session = Session.new resource_params
+  #   let(:params) { { foo: :bar } }
 
-    before { expect(subject).to receive(:resource_params).and_return params }
+  #   before { expect(subject).to receive(:resource_params).and_return params }
 
-    before { expect(Session).to receive(:new).with(params) }
+  #   before { expect(Session).to receive(:new).with(params) }
 
-    it { expect { subject.send(:build_resource) }.to_not raise_error }
-  end
+  #   it { expect { subject.send(:build_resource) }.to_not raise_error }
+  # end
 
-  describe '#resource' do
-    # @session ||= Session.new user: current_user
-    let(:user) { stub_model User }
+  # describe '#resource' do
+  #   # @session ||= Session.new user: current_user
+  #   let(:user) { stub_model User }
 
-    before { expect(subject).to receive(:current_user).and_return user }
+  #   before { expect(subject).to receive(:current_user).and_return user }
 
-    before { expect(Session).to receive(:new).with(user: user) }
+  #   before { expect(Session).to receive(:new).with(user: user) }
 
-    it { expect { subject.send(:resource) }.to_not raise_error }
-  end
+  #   it { expect { subject.send(:resource) }.to_not raise_error }
+  # end
 end

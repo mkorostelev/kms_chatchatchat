@@ -16,4 +16,10 @@ class User < ApplicationRecord
   validates :email, presence: true, uniqueness: { case_sensitive: false }, email: true
 
   validates_uniqueness_of :token, allow_blank: true, allow_nil: true
+
+  after_create :send_mail
+
+  def send_mail
+    WelcomeEmailJob.set(wait_until: DateTime.current + 15.seconds).perform_later(self)
+  end
 end

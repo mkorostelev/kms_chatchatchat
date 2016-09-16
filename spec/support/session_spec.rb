@@ -63,21 +63,11 @@ RSpec.describe Session, type: :lib do
     end
   end
 
-  # describe '#destroy!' do
-  #   before do
-  #     expect(subject).to receive(:user) do
-  #       double.tap do |a|
-  #         expect(a).to receive(:auth_token) do
-  #           double.tap do |b|
-  #             expect(b).to receive(:destroy!)
-  #           end
-  #         end
-  #       end
-  #     end
-  #   end
-  #
-  #   it { expect { subject.destroy! }.to_not raise_error }
-  # end
+  describe '#destroy!' do
+    before { expect(subject).to receive(:user).twice.and_return(user) }
+
+    it { expect { subject.destroy! }.to_not raise_error }
+  end
 
   describe '#token' do
     context do

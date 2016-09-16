@@ -1,13 +1,4 @@
 class Api::ChatsController < ApplicationController
-  def create
-    super
-
-    resource.users.each do |user|
-      # email_message = UserMailer.new_chat_invited_email(user, resource)
-      ApplicationJob.set(wait_until: DateTime.current + 15.seconds).perform_later(user, resource)
-    end
-  end
-
   private
 
   def build_resource

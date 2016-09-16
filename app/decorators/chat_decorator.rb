@@ -6,7 +6,6 @@ class ChatDecorator < Draper::Decorator
   def as_json *args
     super only: [:id, :name],
           methods: context_methods
-
   end
 
   def context_methods

@@ -28,11 +28,9 @@ RSpec.describe Api::ChatsController, type: :controller do
     #   params.require(:chat).permit(:name, user_ids: [])
     # end
 
-    let(:user1) { stub_model User }
+    let(:user) { stub_model User }
 
-    let(:user2) { stub_model User }
-
-    before { sign_in user1 }
+    before { sign_in user }
 
     let(:params) { { chat: { name: 'chat', user_ids: ['1', '2', '3'] } } }
 
@@ -42,31 +40,6 @@ RSpec.describe Api::ChatsController, type: :controller do
         permit!(name: 'chat', user_ids: ['1', '2', '3'])).and_return(resource) }
 
     before { expect(resource).to receive(:save!) }
-
-    #   resource.users.each do |user|
-    #     ApplicationJob.set(wait_until: DateTime.current + 15.seconds)
-    #                                    .perform_later(user, resource)
-    #   end
-
-    before { expect(resource).to receive(:users).and_return([user1, user2]) }
-
-    before do
-      expect(ApplicationJob).to receive(:set)
-                            .with(wait_until: DateTime.current + 15.seconds) do
-        double.tap do |a|
-          expect(a).to receive(:perform_later).with(user1, resource)
-        end
-      end
-    end
-
-    before do
-      expect(ApplicationJob).to receive(:set)
-                            .with(wait_until: DateTime.current + 15.seconds) do
-        double.tap do |a|
-          expect(a).to receive(:perform_later).with(user2, resource)
-        end
-      end
-    end
 
     before { post :create, params: params, format: :json }
 

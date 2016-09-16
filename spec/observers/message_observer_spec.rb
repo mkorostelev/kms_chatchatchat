@@ -15,7 +15,8 @@ RSpec.describe MessageObserver, type: :observer do
     # message.chat.users.each do |user|
     #   users_message = message.users_messages.build(user: user)
     #   users_message.status = :readed if user == message.author
-    #   UserMailer.new_message_email(user, message.chat).deliver_now if user != message.author
+    #   NewMassageEmailJob.set(wait_until: DateTime.current + 15.seconds)
+    #               .perform_later(user, message.chat) if user != message.author
     # end
 
     let(:users_message) { stub_model UsersMessage }
@@ -49,8 +50,11 @@ RSpec.describe MessageObserver, type: :observer do
     before { expect(message).to receive(:chat).and_return(chat) }
 
     before do
-      expect(UserMailer).to receive(:new_message_email).with(user2, chat) do
-        double.tap { |a| expect(a).to receive(:deliver_now) }
+      expect(NewMassageEmailJob).to receive(:set)
+                            .with(wait_until: DateTime.current + 15.seconds) do
+        double.tap do |a|
+          expect(a).to receive(:perform_later).with(user2, chat)
+        end
       end
     end
 

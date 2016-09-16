@@ -6,7 +6,8 @@ class MessageObserver < ActiveRecord::Observer
 
       users_message.status = :readed if user == message.author
 
-      UserMailer.new_message_email(user, message.chat).deliver_now if user != message.author
+      NewMassageEmailJob.set(wait_until: DateTime.current + 15.seconds)
+                    .perform_later(user, message.chat) if user != message.author
     end
     # message.users_messages.select{ |a| a.user_id == message.author_id }
     #                                     .first.status = :readed

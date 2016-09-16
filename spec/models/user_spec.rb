@@ -24,4 +24,20 @@ RSpec.describe User, type: :model do
   it { should have_many(:messages).through(:users_messages) }
 
   it { should have_and_belong_to_many(:chats) }
+
+  describe '#send_mail' do
+    # WelcomeEmailJob.set(wait_until: DateTime.current + 15.seconds).perform_later(self)
+
+    before do
+      expect(WelcomeEmailJob).to receive(:set)
+                            .with(wait_until: DateTime.current + 15.seconds) do
+        double.tap do |a|
+          expect(a).to receive(:perform_later).with(subject)
+        end
+      end
+    end
+    it { expect { subject.send :send_mail }.to_not raise_error }
+  end
+
+
 end

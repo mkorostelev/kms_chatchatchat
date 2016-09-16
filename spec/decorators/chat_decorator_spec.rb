@@ -5,15 +5,21 @@ RSpec.describe ChatDecorator do
 
   let(:chat) { stub_model Chat, id: 1, name: 'Name' }
 
-
-
   describe '#as_json' do
     context 'collection' do
       subject { chat.decorate(context: { user: user, collection: true }) }
 
       before { expect(subject).to receive(:unread_messages_count).and_return 1 }
 
-      before { expect(subject).to receive(:last_message).and_return 2 }
+      # before { expect(subject).to receive(:last_message).and_return 2 }
+
+      before do
+        expect(subject).to receive(:messages) do
+          double.tap do |a|
+            expect(a).to receive(:last).and_return(2)
+          end
+        end
+      end
 
       before { expect(subject).to receive(:users).and_return 3 }
 

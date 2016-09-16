@@ -4,8 +4,6 @@ class Api::UsersController < ApplicationController
   def create
     super
 
-    UserMailer.welcome_email(resource).deliver_now
-
     head :created
   end
 
